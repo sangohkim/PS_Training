@@ -1,0 +1,40 @@
+// 처음에는 같은 문자를 찾았을 때만 다음단계로 진행되도록 코드를 잘못 구성했었다.
+#include <bits/stdc++.h>
+#define endl '\n'
+using namespace std;
+string str1, str2;
+int cache[1000][1000];
+int getLCS(int idx1, int idx2)
+{
+    if (idx1 >= str1.size() || idx2 >= str2.size())
+        return 0;
+    int& ret = cache[idx1][idx2];
+    if (ret != -1)
+        return ret;
+    ret = 0;
+    if (str1[idx1] == str2[idx2])
+        ret = max(ret, 1 + getLCS(idx1 + 1, idx2 + 1));
+    else
+    {
+        int res1 = getLCS(idx1 + 1, idx2);
+        int res2 = getLCS(idx1, idx2 + 1);
+        ret = max(max(ret, res1), res2);
+    }
+    return ret;
+}
+void solve()
+{
+    fill(&cache[0][0], &cache[0][0] + 1000 * 1000, -1);
+    int res = 0;
+    for (int i = 0; i < str1.size(); i++)
+        for (int j = 0; j < str2.size(); j++)
+            res = max(res, getLCS(i, j));
+    cout << res << endl;
+}
+int main()
+{
+    cin.tie(0)->sync_with_stdio(false);
+    getline(cin, str1);
+    getline(cin, str2);
+    solve();
+}
