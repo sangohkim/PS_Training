@@ -1,0 +1,66 @@
+// 후위 표기식의 핵심
+// 피연산자는 그냥 출력
+// 연산자가 들어올 때는 자기보다 연산자 우선순위가 같거나 높은 거는 모두 출력 후에 자기보다
+// 연산자 우선순위가 낮은걸 만나면 그대로 push
+// 즉 항상 연산자 우선순위가 높은거부터 출력하게 하는것
+#include <bits/stdc++.h>
+#define endl '\n'
+using namespace std;
+string target_str;
+void solve()
+{
+	getline(cin, target_str);
+	stack<int> stk;
+	char tmp;
+	int len = target_str.size();
+	for (int idx = 0; idx < len; idx++)
+	{
+		char cur_ch = target_str[idx];
+		if (isalpha(cur_ch))
+			cout << cur_ch;
+		else if (cur_ch == '(')
+			stk.push(cur_ch);
+		else if (cur_ch == '*' || cur_ch == '/')
+		{
+			while (!stk.empty() && (stk.top() != '+' && stk.top() != '-' && stk.top() != '('))
+			{
+				tmp = stk.top();
+				cout << tmp;
+				stk.pop();
+			}
+			stk.push(cur_ch);
+		}
+		else if (cur_ch == '+' || cur_ch == '-')
+		{
+			while (!stk.empty() && stk.top() != '(')
+			{
+				tmp = stk.top();
+				cout << tmp;
+				stk.pop();
+			}
+			stk.push(cur_ch);
+		}
+		else
+		{
+			while (!stk.empty() && stk.top() != '(')
+			{
+				tmp = stk.top();
+				cout << tmp;
+				stk.pop();
+			}
+			if (!stk.empty()) stk.pop();
+		}
+	}
+	while (!stk.empty())
+	{
+		tmp = stk.top();
+		cout << tmp;
+		stk.pop();
+	}
+	cout << endl;
+}
+int main()
+{
+	cin.tie(0)->sync_with_stdio(false);
+	solve();
+}
