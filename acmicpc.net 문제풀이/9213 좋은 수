@@ -1,0 +1,32 @@
+// 개인적으로 풀이방법을 알고난뒤 충격을 받음
+// 에라토스테네스의 체는 단순히 다량의 소수를 구하는것뿐 아니라 그 방식을 
+// 적용할수도 있어야 한다는 것을 기억해야 겠다.....
+#include <bits/stdc++.h>
+#define endl '\n'
+#define MAX 1000000
+using namespace std;
+int start, stop, badness;
+vector<int> divisor_sum;
+void solve()
+{
+    int testcnt = 1;
+    cin >> start >> stop >> badness;
+    while (start != 0 || stop != 0 || badness != 0)
+    {
+        divisor_sum = vector<int>(MAX, 0);
+        for (int i = 1; i <= stop; i++)
+            for (int j = 2 * i; j <= stop; j += i)
+                divisor_sum[j] += i;
+        int cnt = 0;
+        for (int i = start; i <= stop; i++)
+            if (abs(i - divisor_sum[i]) <= badness) cnt++;
+        cout << "Test " << testcnt << ": " << cnt << endl;
+        testcnt++;
+        cin >> start >> stop >> badness;
+    }
+}
+int main()
+{
+    cin.tie(0)->sync_with_stdio(false);
+    solve();
+}
